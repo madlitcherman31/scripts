@@ -1,0 +1,71 @@
+local players = game:GetService("Players")
+local runService = game:GetService("RunService")
+local inputService = game:GetService("UserInputService")
+
+local player = players.LocalPlayer
+local id = tostring(player.UserId)
+local gui = player:WaitForChild("PlayerGui")
+
+local targets = {
+	gui:WaitForChild("GUI"):WaitForChild("Top"),
+	gui:WaitForChild("GUI"):WaitForChild("Winner"),
+	gui:WaitForChild("GUI_Scorecard"):WaitForChild("Scorecard")
+}
+
+local active = false
+local loop
+local hidden = {}
+
+local function checkId(obj)
+	for _, prop in ipairs({"Image", "Texture"}) do
+		local ok, val = pcall(function() return obj[prop] end)
+		if ok and type(val) == "string" and val:find(id) then
+			return true
+		end
+	end
+	return false
+end
+
+local function scan()
+	local found = false
+	for _, folder in ipairs(targets) do
+		for _, item in ipairs(folder:GetDescendants()) do
+			if checkId(item) then
+				found = true
+				pcall(function()
+					if item.Visible ~= false then
+						item.Visible = false
+						hidden[item] = true
+					end
+				end)
+			end
+		end
+	end
+end
+
+local function toggle()
+	active = not active
+	if active then
+		loop = runService.RenderStepped:Connect(scan)
+	else
+		if loop then
+			loop:Disconnect()
+			loop = nil
+		end
+		for item in pairs(hidden) do
+			pcall(function()
+				if item and item.Parent then
+					item.Visible = true
+				end
+			end)
+		end
+		table.clear(hidden)
+	end
+end
+
+inputService.InputBegan:Connect(function(input, processed)
+	if processed then return end
+	if input.KeyCode == Enum.KeyCode.H then
+		toggle()
+	end
+end)
