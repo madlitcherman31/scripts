@@ -8,7 +8,6 @@ local gui = player:WaitForChild("PlayerGui")
 
 local targets = {
 	gui:WaitForChild("GUI"):WaitForChild("Top"),
-	gui:WaitForChild("GUI"):WaitForChild("Winner"),
 	gui:WaitForChild("GUI_Scorecard"):WaitForChild("Scorecard")
 }
 
