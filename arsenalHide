@@ -34,5 +34,10 @@ while true do
     task.wait()
     if auraValue.Value == true then
         updateUI()
+        elseif auraValue.Value == false then
+        GUI.Top.Visible = true
+        GUI.TopRight.Visible = true
+        GUI.Winner.Visible = true
+        end
     end
 end
