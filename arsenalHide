@@ -1,40 +1,32 @@
 local uis = game:GetService("UserInputService")
-
 local player = game.Players.LocalPlayer
-local GUI = player.PlayerGui.GUI
-local auraValue = Instance.new("BoolValue")
+local GUI = player.PlayerGui:WaitForChild("GUI")
 
-auraValue.Parent = player
-auraValue.Value = false
+local auraActive = false
 
 local function updateUI()
-    if auraValue.Value == true then
+    if auraActive then
         GUI.Top.Visible = false
         GUI.TopRight.Visible = false
         GUI.Winner.Visible = false
-        else
-        return
+    else
+        GUI.Top.Visible = true
+        GUI.TopRight.Visible = true
+        GUI.Winner.Visible = true
     end
 end
 
-uis.InputBegan:Connect(function(input)
-    if (uis:GetFocusedTextBox()) then
-        return;
+uis.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed or uis:GetFocusedTextBox() then
+        return
     end
-if input.KeyCode == Enum.KeyCode.H then
-    if auraValue.Value == true then
-        auraValue.Value = false
-        else
-        auraValue.Value = true
-        end
+    
+    if input.KeyCode == Enum.KeyCode.H then
+        auraActive = not auraActive -- Toggles between true and false
     end
 end)
 
 while true do
     task.wait()
-    if auraValue.Value == true then
-        updateUI()
-        else
-        print("NIGGERTEST")
-    end
+    updateUI()
 end
