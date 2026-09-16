@@ -34,7 +34,5 @@ end)
 
 while true do
     task.wait()
-    if auraValue.Value == true then
         updateUI()
-    end
 end
